@@ -1,3 +1,4 @@
+import loader from './ssr-sync-federation-loader';
 export class SsrSyncFederationLoader {
-  loader = require('./ssr-sync-federation-loader');
+  static loader = loader;
 }
