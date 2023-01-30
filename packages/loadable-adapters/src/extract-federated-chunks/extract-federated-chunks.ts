@@ -90,7 +90,7 @@ export function extractFederatedChunks(
         return;
       }
       const remoteStats = mfChunks.find((remote) => remote.name === appName);
-      remoteStats.exposes[component].forEach((chunk: string) => {
+      remoteStats.exposes[component].forEach(({ chunk }: { chunk: string }) => {
         const url = `${mfPublicHost[appName]}/${chunk}`;
 
         // eslint-disable-next-line no-unused-expressions
