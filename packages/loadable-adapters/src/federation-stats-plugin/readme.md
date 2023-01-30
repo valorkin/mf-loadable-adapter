@@ -18,12 +18,35 @@ As an option you could provide a output file name
   "name": "AppName",
   "exposes": {
     "module1": [
-      "vendors-node_modules_babel_runtime_helpers_esm_slicedToArray.js",
-      "vendors-node_modules_core-js.js",
-      "vendors-node_modules_prop-types_index_js.js"
+      {
+        "chunk": "vendors-node_modules_babel_runtime_helpers_esm_slicedToArray.js",
+        "integrity": "sha256-6ztd5MP6NcgnUXeP3xulOfEGhJg3qlFu7ztMGaGaj3Q="
+      },
+      {
+        "chunk": "vendors-node_modules_core-js.js",
+        "integrity": "sha384-v0xgYodEvbgtfRPNinFTbTlRUvWfHSCU4LhxlYnulu6eKSAo4A95Uw/l5cLfo2ra"
+      },
+      {
+        "chunk": "vendors-node_modules_prop-types_index_js.js",
+        "integrity": "sha512-O4tsGm/weU4T1hL1szM0E2M/4k7dj0x/I9rmserP99LxYS1492/d5VRPg0tajOtWIPzMoCxvfkr37/mOUwZgBg=="
+      }
     ],
-    "module2": ["vendors-node_modules_core-js.js"],
-    "module3": ["vendors-node_modules_babel.js", "vendors-node_modules_core-js.js"]
+    "module2": [
+      {
+        "chunk": "vendors-node_modules_core-js.js",
+        "integrity": "sha384-v0xgYodEvbgtfRPNinFTbTlRUvWfHSCU4LhxlYnulu6eKSAo4A95Uw/l5cLfo2ra"
+      }
+    ],
+    "module3": [
+      {
+        "chunk": "vendors-node_modules_babel.js",
+        "integrity": "sha256-6ztd5MP6NcgnUXeP3xulOfEGhJg3qlFu7ztMGaGaj3Q="
+      },
+      {
+        "chunk": "vendors-node_modules_core-js.js",
+        "integrity": "sha384-v0xgYodEvbgtfRPNinFTbTlRUvWfHSCU4LhxlYnulu6eKSAo4A95Uw/l5cLfo2ra"
+      }
+    ]
   }
 }
 ```
