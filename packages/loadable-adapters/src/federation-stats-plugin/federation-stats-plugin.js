@@ -59,7 +59,6 @@ export class FederationStatsPlugin {
             return {
               module: exposedAs,
               chunks: chunks,
-              id: module.id,
             };
           });
 
@@ -68,7 +67,6 @@ export class FederationStatsPlugin {
               Object.assign(result, {
                 [current.module.replace('./', '')]: current.chunks.map((chunk) => ({
                   chunk,
-                  id: current.id,
                 })),
               }),
             {}
