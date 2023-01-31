@@ -113,7 +113,6 @@ export class FederationStatsPlugin {
             .assets.filter((asset) => Boolean(asset.integrity))
             .forEach((asset) => {
               const integrity = Array.isArray(asset.integrity) ? asset.integrity[0] : asset.integrity;
-              console.log(asset.name, integrity);
               assetIntegrityMap.set(asset.name, integrity);
             });
         });
