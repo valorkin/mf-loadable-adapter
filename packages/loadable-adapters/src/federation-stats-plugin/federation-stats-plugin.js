@@ -122,7 +122,9 @@ export class FederationStatsPlugin {
           const fileName = this._options.fileName;
           const statsFilePath = path.join(compiler.options.output.path, fileName);
 
-          if (!fs.existsSync(statsFilePath)) return;
+          if (!fs.existsSync(statsFilePath)) {
+            throw new Error(`[${PLUGIN_NAME}] ${fileName} file not found.`);
+          }
 
           const rawMfStats = fs.readFileSync(statsFilePath, 'utf-8');
 
