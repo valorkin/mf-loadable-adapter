@@ -1,3 +1,6 @@
+import * as fs from 'fs';
+import * as path from 'path';
+
 const PLUGIN_NAME = 'FederationStatsPlugin';
 
 const EXTENSION_REGEX = /\.[^/.]+$/;
@@ -56,14 +59,15 @@ export class FederationStatsPlugin {
             return {
               module: exposedAs,
               chunks: chunks,
-              id: module.id,
             };
           });
 
           const exposes = chunks.reduce(
             (result, current) =>
               Object.assign(result, {
-                [current.module.replace('./', '')]: current.chunks,
+                [current.module.replace('./', '')]: current.chunks.map((chunk) => ({
+                  chunk,
+                })),
               }),
             {}
           );
@@ -91,6 +95,44 @@ export class FederationStatsPlugin {
           }
         }
       );
+
+      const hasSriPlugin = Boolean(
+        compiler.options.plugins &&
+          compiler.options.plugins.find((plugin) => plugin.constructor.name === 'SubresourceIntegrityPlugin')
+      );
+
+      if (hasSriPlugin) {
+        // needs to be optimized
+        const assetIntegrityMap = new Map();
+
+        compiler.hooks.done.tap(PLUGIN_NAME, (stats) => {
+          assetIntegrityMap.clear();
+
+          stats
+            .toJson()
+            .assets.filter((asset) => Boolean(asset.integrity))
+            .forEach((asset) => {
+              const integrity = Array.isArray(asset.integrity) ? asset.integrity[0] : asset.integrity;
+              assetIntegrityMap.set(asset.name, integrity);
+            });
+        });
+
+        compiler.hooks.afterDone.tap(PLUGIN_NAME, () => {
+          const fileName = this._options.fileName;
+          const statsFilePath = path.join(compiler.options.output.path, fileName);
+          const rawMfStats = fs.readFileSync(statsFilePath, 'utf-8');
+          const mfStats = JSON.parse(rawMfStats);
+
+          Object.entries(mfStats.exposes).forEach(([key, value]) => {
+            mfStats.exposes[key] = value.map((v) => {
+              const integrity = assetIntegrityMap.get(v.chunk);
+              return { ...v, integrity };
+            });
+          });
+
+          fs.writeFileSync(statsFilePath, JSON.stringify(mfStats, null, 2));
+        });
+      }
     });
   }
 }
