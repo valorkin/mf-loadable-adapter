@@ -121,8 +121,17 @@ export class FederationStatsPlugin {
         compiler.hooks.afterDone.tap(PLUGIN_NAME, () => {
           const fileName = this._options.fileName;
           const statsFilePath = path.join(compiler.options.output.path, fileName);
+
+          if (!fs.existsSync(statsFilePath)) return;
+
           const rawMfStats = fs.readFileSync(statsFilePath, 'utf-8');
-          const mfStats = JSON.parse(rawMfStats);
+
+          let mfStats;
+          try {
+            mfStats = JSON.parse(rawMfStats);
+          } catch (error) {
+            throw new Error(`[${PLUGIN_NAME}] Error parsing ${fileName} file.`);
+          }
 
           Object.entries(mfStats.exposes).forEach(([key, value]) => {
             mfStats.exposes[key] = value.map((v) => {
